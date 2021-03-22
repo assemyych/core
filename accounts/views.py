@@ -67,7 +67,7 @@ def send_otp(phone):
         return False
 
 
-class ValidateCode(CreateAPIView):
+class ValidateCode(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         phone = request.data.get('phone', False)
         otp_sent = request.data.get('code', False)
@@ -102,7 +102,7 @@ class ValidateCode(CreateAPIView):
             })
 
 
-class Register(CreateAPIView):
+class Register(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         phone = request.data.get('phone', False)
         password = request.data.get('password', False)
