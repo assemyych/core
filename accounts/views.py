@@ -8,7 +8,7 @@ from rest_framework import generics
 
 class ValidatePhone(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
-        phone_number = request.data.get['phone']
+        phone_number = request.data.get('phone')
         if phone_number:
             phone = str(phone_number)
             user = User.objects.filter(phone__iexact=phone)
