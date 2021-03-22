@@ -6,7 +6,7 @@ from .models import User, PhoneOTP
 from rest_framework import generics
 
 
-class ValidatePhoneSendCode(generics.CreateAPIView):
+class ValidatePhoneSendCode(generics.ListAPIView):
     def post(self, request, *args, **kwargs):
         phone_number = request.data.get('phone')
         if phone_number:
