@@ -67,6 +67,7 @@ def send_otp(phone):
 
 
 class ValidateCode(generics.ListCreateAPIView):
+    queryset = ''
     def post(self, request, *args, **kwargs):
         phone = request.data.get('phone', False)
         otp_sent = request.data.get('code', False)
