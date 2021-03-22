@@ -3,10 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import CreateUserSerializer
 from .models import User, PhoneOTP
+from rest_framework import generics
 
 
 
-class ValidatePhoneSendOTP(APIView):
+class ValidatePhoneSendCode(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         phone_number = request.data.get('phone')
         if phone_number:
@@ -66,7 +67,7 @@ def send_otp(phone):
         return False
 
 
-class ValidateOTP(APIView):
+class ValidateCode(CreateAPIView):
     def post(self, request, *args, **kwargs):
         phone = request.data.get('phone', False)
         otp_sent = request.data.get('code', False)
@@ -101,7 +102,7 @@ class ValidateOTP(APIView):
             })
 
 
-class Register(APIView):
+class Register(CreateAPIView):
     def post(self, request, *args, **kwargs):
         phone = request.data.get('phone', False)
         password = request.data.get('password', False)
