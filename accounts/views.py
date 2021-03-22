@@ -6,9 +6,9 @@ from .models import User, PhoneOTP
 from rest_framework import generics
 
 
-class ValidatePhoneSendCode(generics.ListCreateAPIView):
+class ValidatePhone(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
-        phone_number = request.POST['phone']
+        phone_number = request.data.get['phone']
         if phone_number:
             phone = str(phone_number)
             user = User.objects.filter(phone__iexact=phone)
@@ -68,8 +68,8 @@ def send_otp(phone):
 
 class ValidateCode(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
-        phone = request.POST.get('phone', False)
-        otp_sent = request.POST.get('code', False)
+        phone = request.data.get('phone', False)
+        otp_sent = request.data.get('code', False)
 
         if phone and otp_sent:
             old = PhoneOTP.objects.filter(phone__iexact=phone)
@@ -103,8 +103,8 @@ class ValidateCode(generics.ListCreateAPIView):
 
 class Register(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
-        phone = request.POST.get('phone', False)
-        password = request.POST.get('password', False)
+        phone = request.data.get('phone', False)
+        password = request.data.get('password', False)
 
         if phone and password:
             phone = str(phone)
