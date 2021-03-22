@@ -1,17 +1,8 @@
 import random
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from django.contrib.auth import login
-# from knox.auth import TokenAuthentication
-# from knox.views import LoginView as KnoxLoginView
-# from blissedmaths.utils import phone_validator, password_generator, otp_generator
-# from .serializers import (CreateUserSerializer, ChangePasswordSerializer,
-#                           UserSerializer, LoginUserSerializer, ForgetPasswordSerializer)
 from rest_framework.views import APIView
 from .serializers import CreateUserSerializer
 from .models import User, PhoneOTP
-from django.shortcuts import get_object_or_404
-from django.db.models import Q
 
 
 
@@ -44,7 +35,7 @@ class ValidatePhoneSendOTP(APIView):
 
                         PhoneOTP.objects.create(
                             phone=phone,
-                            otp=code,
+                            code=code,
                             count=count
 
                         )
@@ -55,11 +46,11 @@ class ValidatePhoneSendOTP(APIView):
                         })
                 else:
                     return Response({
-                        'status': 'False', 'message': "OTP sending error. Please try after some time."
+                        'status': 'False', 'message': "Code sending error. Please try after some time."
                     })
 
                 return Response({
-                    'status': True, 'message': 'Otp has been sent successfully.'
+                    'status': True, 'message': 'Code has been sent successfully.'
                 })
         else:
             return Response({
@@ -78,14 +69,14 @@ def send_otp(phone):
 class ValidateOTP(APIView):
     def post(self, request, *args, **kwargs):
         phone = request.data.get('phone', False)
-        otp_sent = request.data.get('otp', False)
+        otp_sent = request.data.get('code', False)
 
         if phone and otp_sent:
             old = PhoneOTP.objects.filter(phone__iexact=phone)
             if old.exists():
                 old = old.first()
-                otp = old.code
-                if str(otp) == str(otp_sent):
+                code = old.code
+                if str(code) == str(otp_sent):
                     old.logged = True
                     old.save()
 
