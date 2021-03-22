@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'vo3^oan(aele6m0uc7a!q_=&@3xh$lveyeb^k#kj=h5k9-m_c8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['taboo2021.herokuapp.com', '127.0.0.1']
 
