@@ -1,9 +1,11 @@
 import random
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import CreateUserSerializer
+from .serializers import CreateUserSerializer, LoginUserSerializer
 from .models import User, PhoneOTP
-from rest_framework import generics
+from rest_framework import permissions
+from knox.views import LoginView as KnoxLoginView
+from django.contrib.auth import login
 
 
 class ValidatePhone(APIView):
@@ -145,3 +147,21 @@ class Register(APIView):
                 'status': 'False',
                 'message': 'Phone or password was not recieved'
             })
+
+class Login(KnoxLoginView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        serializer = LoginUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        if user.last_login is None:
+            user.first_login = True
+            user.save()
+
+        elif user.first_login:
+            user.first_login = False
+            user.save()
+
+        login(request, user)
+        return super().post(request, format=None)
